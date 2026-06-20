@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كواليس — أدوات صناع المحتوى المجانية</title>
+<meta name="description" content="دليل مجمّع لأفضل الأدوات المجانية لصناع المحتوى: تحرير فيديو، تصميم، أفكار، تحليلات، وجدولة نشر — كل شيء في مكان واحد.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #10211F;
+    --bg-soft: #16302C;
+    --ink: #F4EFE6;
+    --muted: #92A39C;
+    --amber: #E8A33D;
+    --coral: #FF5C72;
+    --line: rgba(244,239,230,0.12);
+    --radius: 14px;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Tajawal', sans-serif;
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(0deg, rgba(244,239,230,0.025) 0px, rgba(244,239,230,0.025) 1px, transparent 1px, transparent 3px);
+    z-index: 1;
+    opacity: 0.5;
+  }
+
+  .ltr-num{ direction: ltr; unicode-bidi: bidi-override; font-family: 'JetBrains Mono', monospace; }
+
+  a{ color: inherit; text-decoration: none; }
+  img{ max-width:100%; display:block; }
+
+  :focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+  }
+
+  /* ===== شريط REC العلوي ===== */
+  .hud-bar{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 20px;
+    background: rgba(16,33,31,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .hud-bar .brand{
+    font-family: 'Cairo', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+  .rec-indicator{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .rec-dot{
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--coral);
+    box-shadow: 0 0 8px 1px var(--coral);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity: 1; }
+    50%{ opacity: 0.35; }
+  }
+
+  /* ===== الهيرو ===== */
+  .hero{
+    position: relative;
+    z-index: 2;
+    padding: 64px 20px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .hero-frame{
+    position: relative;
+    padding: 50px 20px;
+  }
+  .hero-frame::before,
+  .hero-frame::after,
+  .corner-tl, .corner-br{
+    content:"";
+    position: absolute;
+    width: 22px; height: 22px;
+    border-color: var(--amber);
+    opacity: 0.7;
+  }
+  .hero-frame::before{
+    top: 0; right: 0;
+    border-top: 2px solid var(--amber);
+    border-right: 2px solid var(--amber);
+  }
+  .hero-frame::after{
+    bottom: 0; left: 0;
+    border-bottom: 2px solid var(--amber);
+    border-left: 2px solid var(--amber);
+  }
+
+  .eyebrow{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+
+  h1.title{
+    font-family: 'Cairo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 9vw, 72px);
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  .hero p.lede{
+    font-size: clamp(16px, 2.6vw, 19px);
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 30px;
+  }
+
+  .play-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--amber);
+    color: #10211F;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 0 0 0 rgba(232,163,61,0);
+  }
+  .play-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -6px rgba(232,163,61,0.6);
+  }
+  .play-btn svg{ width: 14px; height: 14px; }
+
+  .hud-stats{
+    margin-top: 36px;
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .hud-stats span{ display:flex; align-items:center; gap:6px; }
+  .hud-stats b{ color: var(--ink); }
+
+  /* ===== شريط الفصول (filmstrip nav) ===== */
+  .chapters-nav{
+    position: sticky;
+    top: 41px;
+    z-index: 40;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 12px 16px;
+    scrollbar-width: none;
+  }
+  .chapters-nav::-webkit-scrollbar{ display:none; }
+  .chapters-list{
+    display: inline-flex;
+    gap: 8px;
+  }
+  .chapter-pill{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .chapter-pill .tally{
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--line);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .chapter-pill.active{
+    color: var(--ink);
+    border-color: var(--coral);
+  }
+  .chapter-pill.active .tally{
+    background: var(--coral);
+    box-shadow: 0 0 6px 1px var(--coral);
+  }
+
+  /* ===== المشاهد (الأقسام) ===== */
+  .scene{
+    position: relative;
+    z-index: 2;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 64px 20px 10px;
+    scroll-margin-top: 90px;
+  }
+  .scene-header{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .scene-header.in-view{ opacity: 1; transform: translateY(0); }
+
+  .scene-icon{
+    width: 42px; height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--bg-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--amber);
+  }
+  .scene-icon svg{ width: 22px; height: 22px; }
+
+  .scene-meta{ display:flex; flex-direction: column; gap: 2px; }
+  .scene-timecode{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--coral);
+    letter-spacing: 0.05em;
+  }
+  .scene-title{
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: clamp(22px, 3.4vw, 28px);
+  }
+  .scene-sub{
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .tools-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .tool-card{
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s ease;
+  }
+  .tool-card.in-view{ opacity: 1; transform: translateY(0); }
+  .tool-card:hover{ border-color: var(--amber); }
+
+  .tool-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .tool-name{
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+  }
+  .badge{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    white-space: nowrap;
+    padding: 4px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .badge.full{ background: rgba(232,163,61,0.16); color: var(--amber); }
+  .badge.limited{ background: rgba(255,92,114,0.14); color: var(--coral); }
+
+  .tool-desc{
+    color: var(--muted);
+    font-size: 14px;
+    flex-grow: 1;
+  }
+
+  .tool-link{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .tool-link:hover{ color: var(--amber); border-color: var(--amber); }
+  .tool-link svg{ width: 12px; height: 12px; transform: scaleX(-1); }
+
+  /* ===== بطاقة نصيحة الأسبوع ===== */
+  .tip-card{
+    max-width: 1040px;
+    margin: 30px auto 0;
+    padding: 0 20px;
+  }
+  .tip-inner{
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 4px;
+    padding: 26px 24px;
+    transform: rotate(-0.6deg);
+    box-shadow: 0 14px 30px -12px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .tip-label{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--coral);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .tip-text{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+
+  /* ===== بطاقة المقارنة ===== */
+  .compare-card{
+    max-width: 1040px;
+    margin: 30px auto 0;
+    padding: 0 20px;
+  }
+  .compare-label{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--coral);
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .compare-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  @media (min-width: 620px){
+    .compare-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  .compare-side{
+    background: var(--bg-soft);
+    padding: 22px;
+  }
+  .compare-side h3{
+    font-family: 'Cairo', sans-serif;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .compare-side p{
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .compare-vs{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    padding: 6px 0;
+  }
+
+  /* ===== الفوتر ===== */
+  footer{
+    position: relative;
+    z-index: 2;
+    max-width: 1040px;
+    margin: 90px auto 0;
+    padding: 50px 20px 60px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  .end-card{
+    font-family: 'Cairo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(26px, 5vw, 38px);
+    margin-bottom: 14px;
+  }
+  footer p{
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0 auto 24px;
+  }
+  .footer-tag{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  section + section{ margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="hud-bar">
+  <span class="brand">كواليس</span>
+  <span class="rec-indicator">
+    <span class="rec-dot"></span>
+    REC <span id="recTimer" class="ltr-num">00:00:00</span>
+  </span>
+</div>
+
+<header class="hero">
+  <div class="hero-frame">
+    <span class="eyebrow ltr-num">FREE TOOLS / EP. 01</span>
+    <h1 class="title">كواليس</h1>
+    <p class="lede">كل أداة مجانية محتاجها صانع محتوى — تحرير، تصميم، أفكار، تحليل، وجدولة — مجمّعة ومجرّبة في مكان واحد.</p>
+    <a href="#scene-01" class="play-btn">
+      ابدأ الاستكشاف
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </a>
+    <div class="hud-stats">
+      <span><b class="ltr-num">20</b> أداة</span>
+      <span><b class="ltr-num">05</b> أقسام</span>
+      <span>تحديث <b>أسبوعي</b></span>
+    </div>
+  </div>
+</header>
+
+<nav class="chapters-nav" aria-label="فهرس الأقسام">
+  <div class="chapters-list">
+    <a href="#scene-01" class="chapter-pill" data-target="scene-01"><span class="tally"></span> تحرير الفيديو</a>
+    <a href="#scene-02" class="chapter-pill" data-target="scene-02"><span class="tally"></span> التصميم والصور</a>
+    <a href="#scene-03" class="chapter-pill" data-target="scene-03"><span class="tally"></span> كتابة الأفكار</a>
+    <a href="#scene-04" class="chapter-pill" data-target="scene-04"><span class="tally"></span> التحليل والإحصائيات</a>
+    <a href="#scene-05" class="chapter-pill" data-target="scene-05"><span class="tally"></span> الجدولة والنشر</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== المشهد 01 — تحرير الفيديو ===== -->
+  <section class="scene" id="scene-01">
+    <div class="scene-header">
+      <div class="scene-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="6" width="18" height="14" rx="2"/>
+          <path d="M3 9.5h18"/>
+          <path d="M7 6l2-3M12 6l2-3M17 6l2-3"/>
+        </svg>
+      </div>
+      <div class="scene-meta">
+        <span class="scene-timecode ltr-num">00:00:01:00</span>
+        <h2 class="scene-title">تحرير الفيديو</h2>
+        <p class="scene-sub">من القص السريع إلى التحرير الاحترافي على الهاتف.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">CapCut</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">تحرير فيديو كامل بفلاتر وانتقالات وقوالب جاهزة، بدون علامة مائية.</p>
+        <a class="tool-link" href="https://www.capcut.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">InShot</span><span class="badge limited">مجاني (علامة مائية)</span></div>
+        <p class="tool-desc">واجهة مبسطة جداً، مثالية للمبتدئين في التحرير السريع.</p>
+        <a class="tool-link" href="https://inshot.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">VN Video Editor</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">تحرير احترافي على الهاتف بدون علامة مائية أو قيود.</p>
+        <a class="tool-link" href="https://vnvideoeditor.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">DaVinci Resolve</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">تحرير احترافي لسطح المكتب بمستوى استوديوهات، منحنى تعلم أعلى.</p>
+        <a class="tool-link" href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== المشهد 02 — التصميم والصور ===== -->
+  <section class="scene" id="scene-02">
+    <div class="scene-header">
+      <div class="scene-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="14" height="14" rx="2"/>
+          <path d="M8 21h13M21 3v13"/>
+        </svg>
+      </div>
+      <div class="scene-meta">
+        <span class="scene-timecode ltr-num">00:00:02:00</span>
+        <h2 class="scene-title">التصميم والصور</h2>
+        <p class="scene-sub">غلاف، ستوري، أو صورة منتج — بدون مصمم وبدون تكلفة.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Canva</span><span class="badge limited">مجاني (Pro مدفوع)</span></div>
+        <p class="tool-desc">آلاف القوالب الجاهزة لكل منصة، أسهل أداة تصميم للمبتدئين.</p>
+        <a class="tool-link" href="https://www.canva.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Photopea</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">بديل فوتوشوب يعمل من المتصفح مباشرة، بدون تثبيت.</p>
+        <a class="tool-link" href="https://www.photopea.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Remove.bg</span><span class="badge limited">مجاني (محدود يومياً)</span></div>
+        <p class="tool-desc">إزالة خلفية أي صورة تلقائياً في ثانية واحدة.</p>
+        <a class="tool-link" href="https://www.remove.bg" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Unsplash</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">صور عالية الجودة بدون حقوق ملكية، تستخدمها كما تشاء.</p>
+        <a class="tool-link" href="https://unsplash.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-inner">
+        <span class="tip-label ltr-num">TIP // 01</span>
+        <p class="tip-text">راجع إحصائيات أي منصة بعد مرور 48 ساعة من النشر، مش فوراً — المنصة تحتاج وقت تجمع بيانات حقيقية عن وصول الفيديو لجمهوره الفعلي.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== المشهد 03 — كتابة الأفكار ===== -->
+  <section class="scene" id="scene-03">
+    <div class="scene-header">
+      <div class="scene-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.8 10.7c.6.5 1 1.2 1 2.3h5.6c0-1.1.4-1.8 1-2.3A6 6 0 0 0 12 3z"/>
+        </svg>
+      </div>
+      <div class="scene-meta">
+        <span class="scene-timecode ltr-num">00:00:03:00</span>
+        <h2 class="scene-title">كتابة الأفكار والمحتوى</h2>
+        <p class="scene-sub">قبل الكاميرا، فيه فكرة محتاجة تتولد وتتصاغ.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">ChatGPT</span><span class="badge limited">مجاني (نسخة محدودة)</span></div>
+        <p class="tool-desc">توليد أفكار محتوى، عناوين، وسكربتات فيديو خلال ثوانٍ.</p>
+        <a class="tool-link" href="https://chat.openai.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Notion</span><span class="badge full">مجاني للاستخدام الفردي</span></div>
+        <p class="tool-desc">تنظيم أفكار المحتوى وجدول النشر في مكان واحد مرتب.</p>
+        <a class="tool-link" href="https://www.notion.so" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Google Trends</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">معرفة المواضيع الرائجة فعلياً الآن قبل ما تختار فكرتك.</p>
+        <a class="tool-link" href="https://trends.google.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">AnswerThePublic</span><span class="badge limited">مجاني (محدود)</span></div>
+        <p class="tool-desc">يعرض الأسئلة الشائعة حول أي موضوع — أفكار محتوى جاهزة.</p>
+        <a class="tool-link" href="https://answerthepublic.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== المشهد 04 — التحليل والإحصائيات ===== -->
+  <section class="scene" id="scene-04">
+    <div class="scene-header">
+      <div class="scene-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 20V10M12 20V4M20 20v-7"/>
+        </svg>
+      </div>
+      <div class="scene-meta">
+        <span class="scene-timecode ltr-num">00:00:04:00</span>
+        <h2 class="scene-title">التحليل والإحصائيات</h2>
+        <p class="scene-sub">الأرقام اللي تقولك إيه اللي يشتغل فعلاً.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">TikTok Analytics</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">تحليل أداء الفيديوهات والجمهور مدمج داخل التطبيق مباشرة.</p>
+        <span class="tool-link">متوفرة داخل التطبيق</span>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Instagram Insights</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">إحصائيات الوصول والتفاعل لكل منشور وستوري وريل.</p>
+        <span class="tool-link">متوفرة داخل التطبيق</span>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">TubeBuddy</span><span class="badge limited">مجاني (محدود)</span></div>
+        <p class="tool-desc">تحليل الكلمات المفتاحية والمنافسين على يوتيوب.</p>
+        <a class="tool-link" href="https://www.tubebuddy.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Linktree</span><span class="badge limited">مجاني (محدود)</span></div>
+        <p class="tool-desc">رابط واحد في البايو مع إحصائيات نقرات كل رابط فرعي.</p>
+        <a class="tool-link" href="https://linktr.ee" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
+
+    <div class="compare-card">
+      <span class="compare-label ltr-num">COMPARE // CapCut vs InShot</span>
+      <div class="compare-grid">
+        <div class="compare-side">
+          <h3>CapCut</h3>
+          <p>مجاني بالكامل بدون علامة مائية، تأثيرات وقوالب أكثر، لكن واجهته أوسع وتحتاج وقت تتعود عليها.</p>
+        </div>
+        <div class="compare-side">
+          <h3>InShot</h3>
+          <p>أسهل بكتير للمبتدئين وواجهته مبسطة، لكن فيه علامة مائية إلا لو اشتريت النسخة المدفوعة.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== المشهد 05 — الجدولة والنشر ===== -->
+  <section class="scene" id="scene-05">
+    <div class="scene-header">
+      <div class="scene-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="16" rx="2"/>
+          <path d="M3 10h18M8 3v4M16 3v4"/>
+        </svg>
+      </div>
+      <div class="scene-meta">
+        <span class="scene-timecode ltr-num">00:00:05:00</span>
+        <h2 class="scene-title">الجدولة والنشر</h2>
+        <p class="scene-sub">جهّز المحتوى مرة، وخلّيه ينشر نفسه طول الأسبوع.</p>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Meta Business Suite</span><span class="badge full">مجاني بالكامل</span></div>
+        <p class="tool-desc">جدولة منشورات فيسبوك وانستغرام من لوحة واحدة، مباشرة من ميتا.</p>
+        <a class="tool-link" href="https://business.facebook.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Later</span><span class="badge limited">مجاني (محدود الكمية)</span></div>
+        <p class="tool-desc">جدولة بصرية لعدة منصات مع معاينة شكل الصفحة قبل النشر.</p>
+        <a class="tool-link" href="https://later.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Buffer</span><span class="badge limited">مجاني (حساب لكل منصة)</span></div>
+        <p class="tool-desc">جدولة بسيطة وسريعة، مناسبة لصانع محتوى يبدأ بحساب واحد.</p>
+        <a class="tool-link" href="https://buffer.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-top"><span class="tool-name">Hootsuite</span><span class="badge limited">مجاني (محدود)</span></div>
+        <p class="tool-desc">إدارة وجدولة عدة حسابات من لوحة تحكم واحدة شاملة.</p>
+        <a class="tool-link" href="https://www.hootsuite.com" target="_blank" rel="noopener">جرّبها الآن <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p class="end-card">نهاية الحلقة</p>
+  <p>الموقع ده ملف واحد بسيط — تقدر تعدّل عليه مباشرة لو حبيت تضيف أداة جديدة، أو ترفعه كما هو على أي استضافة مجانية.</p>
+  <span class="footer-tag ltr-num">UPDATED WEEKLY · MADE WITH ☕</span>
+</footer>
+
+<script>
+  // ===== مؤقت REC =====
+  const recStart = Date.now();
+  const recEl = document.getElementById('recTimer');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function updateTimer(){
+    const diff = Math.floor((Date.now() - recStart) / 1000);
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
+    const s = diff % 60;
+    recEl.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+  }
+  setInterval(updateTimer, 1000);
+  updateTimer();
+
+  // ===== سكرول-سباي للفصول =====
+  const scenes = document.querySelectorAll('.scene');
+  const pills = document.querySelectorAll('.chapter-pill');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        pills.forEach(p => p.classList.remove('active'));
+        const match = document.querySelector('.chapter-pill[data-target="' + entry.target.id + '"]');
+        if(match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  scenes.forEach(s => navObserver.observe(s));
+
+  // ===== ظهور تدريجي عند التمرير =====
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.scene-header, .tool-card').forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
